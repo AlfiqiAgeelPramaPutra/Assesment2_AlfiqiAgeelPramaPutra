@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
@@ -22,11 +23,53 @@
         </thead>
     </table>
 
+    <div id="form-container">
+        <form id="api-form">
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id" readonly><br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" readonly><br>
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" readonly><br>
+
+            <label for="capacity">Capacity:</label>
+            <input type="text" id="capacity" name="capacity" readonly><br>
+
+            <label for="price">Price:</label>
+            <input type="text" id="price" name="price" readonly><br>
+
+            <label for="cpu-model">CPU Model:</label>
+            <input type="text" id="cpu-model" name="cpu-model" readonly><br>
+
+            <label for="hard-disk-size">Hard Disk Size:</label>
+            <input type="text" id="hard-disk-size" name="hard-disk-size" readonly><br>
+
+            <label for="generation">Generation:</label>
+            <input type="text" id="generation" name="generation" readonly><br>
+
+            <label for="strap-color">Strap Color:</label>
+            <input type="text" id="strap-color" name="strap-color" readonly><br>
+
+            <label for="case-size">Case Size:</label>
+            <input type="text" id="case-size" name="case-size" readonly><br>
+
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" readonly><br>
+
+            <label for="screen-size">Screen Size:</label>
+            <input type="text" id="screen-size" name="screen-size" readonly><br>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#data-table').DataTable({
+            var dataTable = $('#data-table').DataTable({
                 "ajax": {
                     "url": "https://api.restful-api.dev/objects",
                     "dataSrc": ""
@@ -34,48 +77,45 @@
                 "columns": [
                     { "data": "id" },
                     { "data": "name" },
-                    { 
-                        "data": "data.color",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data.capacity",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data.price",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data['CPU model']",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data['Hard disk size']",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data.generation",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data['Strap Colour']",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data['Case Size']",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data.Description",
-                        "defaultContent": "-"
-                    },
-                    { 
-                        "data": "data['Screen size']",
-                        "defaultContent": "-"
-                    }
+                    { "data": "data.color" },
+                    { "data": "data.capacity" },
+                    { "data": "data.price" },
+                    { "data": "data['CPU model']" },
+                    { "data": "data['Hard disk size']" },
+                    { "data": "data.generation" },
+                    { "data": "data['Strap Colour']" },
+                    { "data": "data['Case Size']" },
+                    { "data": "data.Description" },
+                    { "data": "data['Screen size']" }
                 ]
             });
+
+            $('#data-table tbody').on('click', 'tr', function() {
+                var rowData = dataTable.row(this).data();
+                populateForm(rowData);
+            });
+
+            $('#api-form').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serializeArray();
+                console.log(formData);
+                // Lakukan sesuatu dengan data yang disubmit
+            });
+
+            function populateForm(data) {
+                $('#id').val(data.id);
+                $('#name').val(data.name);
+                $('#color').val(data.data.color || '');
+                $('#capacity').val(data.data.capacity || '');
+                $('#price').val(data.data.price || '');
+                $('#cpu-model').val(data.data['CPU model'] || '');
+                $('#hard-disk-size').val(data.data['Hard disk size'] || '');
+                $('#generation').val(data.data.generation || '');
+                $('#strap-color').val(data.data['Strap Colour'] || '');
+                $('#case-size').val(data.data['Case Size'] || '');
+                $('#description').val(data.data.Description || '');
+                $('#screen-size').val(data.data['Screen size'] || '');
+            }
         });
     </script>
 </body>
