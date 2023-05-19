@@ -1,0 +1,82 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+</head>
+<body>
+    <table id="data-table" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Capacity</th>
+                <th>Price</th>
+                <th>CPU Model</th>
+                <th>Hard Disk Size</th>
+                <th>Generation</th>
+                <th>Strap Color</th>
+                <th>Case Size</th>
+                <th>Description</th>
+                <th>Screen Size</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#data-table').DataTable({
+                "ajax": {
+                    "url": "https://api.restful-api.dev/objects",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { 
+                        "data": "data.color",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data.capacity",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data.price",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data['CPU model']",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data['Hard disk size']",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data.generation",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data['Strap Colour']",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data['Case Size']",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data.Description",
+                        "defaultContent": "-"
+                    },
+                    { 
+                        "data": "data['Screen size']",
+                        "defaultContent": "-"
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
