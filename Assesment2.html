@@ -25,41 +25,38 @@
 
     <div id="form-container">
         <form id="api-form">
-            <label for="id">ID:</label>
-            <input type="text" id="id" name="id" readonly><br>
-
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" readonly><br>
+            <input type="text" id="name" name="name" required><br>
 
             <label for="color">Color:</label>
-            <input type="text" id="color" name="color" readonly><br>
+            <input type="text" id="color" name="color"><br>
 
             <label for="capacity">Capacity:</label>
-            <input type="text" id="capacity" name="capacity" readonly><br>
+            <input type="text" id="capacity" name="capacity"><br>
 
             <label for="price">Price:</label>
-            <input type="text" id="price" name="price" readonly><br>
+            <input type="text" id="price" name="price"><br>
 
             <label for="cpu-model">CPU Model:</label>
-            <input type="text" id="cpu-model" name="cpu-model" readonly><br>
+            <input type="text" id="cpu-model" name="cpu-model"><br>
 
             <label for="hard-disk-size">Hard Disk Size:</label>
-            <input type="text" id="hard-disk-size" name="hard-disk-size" readonly><br>
+            <input type="text" id="hard-disk-size" name="hard-disk-size"><br>
 
             <label for="generation">Generation:</label>
-            <input type="text" id="generation" name="generation" readonly><br>
+            <input type="text" id="generation" name="generation"><br>
 
             <label for="strap-color">Strap Color:</label>
-            <input type="text" id="strap-color" name="strap-color" readonly><br>
+            <input type="text" id="strap-color" name="strap-color"><br>
 
             <label for="case-size">Case Size:</label>
-            <input type="text" id="case-size" name="case-size" readonly><br>
+            <input type="text" id="case-size" name="case-size"><br>
 
             <label for="description">Description:</label>
-            <input type="text" id="description" name="description" readonly><br>
+            <input type="text" id="description" name="description"><br>
 
             <label for="screen-size">Screen Size:</label>
-            <input type="text" id="screen-size" name="screen-size" readonly><br>
+            <input type="text" id="screen-size" name="screen-size"><br>
 
             <button type="submit">Submit</button>
         </form>
@@ -77,44 +74,80 @@
                 "columns": [
                     { "data": "id" },
                     { "data": "name" },
-                    { "data": "data.color" },
-                    { "data": "data.capacity" },
-                    { "data": "data.price" },
-                    { "data": "data['CPU model']" },
-                    { "data": "data['Hard disk size']" },
-                    { "data": "data.generation" },
-                    { "data": "data['Strap Colour']" },
-                    { "data": "data['Case Size']" },
-                    { "data": "data.Description" },
-                    { "data": "data['Screen size']" }
+                    { "data": "color" },
+                    { "data": "capacity" },
+                    { "data": "price" },
+                    { "data": "cpu-model" },
+                    { "data": "hard-disk-size" },
+                    { "data": "generation" },
+                    { "data": "strap-color" },
+                    { "data": "case-size" },
+                    { "data": "description" },
+                    { "data": "screen-size" }
                 ]
-            });
-
-            $('#data-table tbody').on('click', 'tr', function() {
-                var rowData = dataTable.row(this).data();
-                populateForm(rowData);
             });
 
             $('#api-form').submit(function(e) {
                 e.preventDefault();
-                var formData = $(this).serializeArray();
-                console.log(formData);
-                // Lakukan sesuatu dengan data yang disubmit
+                if (validateForm()) {
+                    var formData = {
+                        "name": $('#name').val(),
+                        "color": $('#color').val(),
+                        "capacity": $('#capacity').val(),
+                        "price": $('#price').val(),
+                        "cpu-model": $('#cpu-model').val(),
+                        "hard-disk-size": $('#hard-disk-size').val(),
+                        "generation": $('#generation').val(),
+                        "strap-color": $('#strap-color').val(),
+                        "case-size": $('#case-size').val(),
+                        "description": $('#description').val(),
+                        "screen-size": $('#screen-size').val()
+                    };
+
+                    $.ajax({
+                        url: "https://api.restful-api.dev/objects",
+                        type: "POST",
+                        data: JSON.stringify(formData),
+                        contentType: "application/json",
+                        success: function(response) {
+                            // Data berhasil ditambahkan, lakukan sesuatu di sini
+                            alert("Data added successfully!");
+                            clearForm();
+                            dataTable.ajax.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            // Gagal menambahkan data, lakukan sesuatu di sini
+                            alert("Failed to add data. Error: " + error);
+                        }
+                    });
+                }
             });
 
-            function populateForm(data) {
-                $('#id').val(data.id);
-                $('#name').val(data.name);
-                $('#color').val(data.data.color || '');
-                $('#capacity').val(data.data.capacity || '');
-                $('#price').val(data.data.price || '');
-                $('#cpu-model').val(data.data['CPU model'] || '');
-                $('#hard-disk-size').val(data.data['Hard disk size'] || '');
-                $('#generation').val(data.data.generation || '');
-                $('#strap-color').val(data.data['Strap Colour'] || '');
-                $('#case-size').val(data.data['Case Size'] || '');
-                $('#description').val(data.data.Description || '');
-                $('#screen-size').val(data.data['Screen size'] || '');
+            function validateForm() {
+                // Lakukan validasi formulir di sini
+                // Misalnya, cek apakah kolom yang diperlukan telah diisi
+                var isValid = true;
+                if ($('#name').val() === '') {
+                    alert('Name field is required');
+                    isValid = false;
+                }
+                // Tambahkan validasi lain sesuai kebutuhan
+
+                return isValid;
+            }
+
+            function clearForm() {
+                $('#name').val('');
+                $('#color').val('');
+                $('#capacity').val('');
+                $('#price').val('');
+                $('#cpu-model').val('');
+                $('#hard-disk-size').val('');
+                $('#generation').val('');
+                $('#strap-color').val('');
+                $('#case-size').val('');
+                $('#description').val('');
+                $('#screen-size').val('');
             }
         });
     </script>
